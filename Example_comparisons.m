@@ -113,20 +113,27 @@ set(ax1,'FontSize',tickFontSize,'FontWeight','bold','XColor','k','YColor','k')
 
 % (b) Difference
 ax2 = nexttile;
+yyaxis left
 plot(RefDT,PC_diff,'r-','LineWidth',2);
 hold on
 yline(0,'k-','LineWidth',1);
-xlim(sharedDateLimits)
 ylim(differenceLimits)
-xlabel('Date','FontSize',labelFontSize,'FontWeight','bold','Color','k')
 ylabel('Difference (ft)','FontSize',labelFontSize,'FontWeight','bold','Color','k')
-title('(b) Engauge Digitizer - Water-level difference',...
-    'FontSize',titleFontSize,'FontWeight','bold','Color','k')
+yyaxis right
+% Convert difference limits from feet to percentage
+percentageLimits = (differenceLimits ./ 13.5) * 100;
+ylim(percentageLimits)
+ylabel('Difference (%)','FontSize',labelFontSize,'FontWeight','bold','Color','k')
+xlim(sharedDateLimits)
+xlabel('Date','FontSize',labelFontSize,'FontWeight','bold','Color','k')
+title('(b) Engauge Digitizer - Water-level difference','FontSize',titleFontSize,'FontWeight','bold','Color','k')
 grid on
 box on
-set(ax2,'FontSize',tickFontSize,'FontWeight','bold','XColor','k','YColor','k')
+ax2.YAxis(1).Color = 'k';
+ax2.YAxis(2).Color = 'k';
+set(ax2, ...
+    'FontSize',tickFontSize,'FontWeight','bold','XColor','k')
 linkaxes([ax1 ax2],'x');
-
 
 %% FIGURE 2: WEBPLOTDIGITIZER
 
@@ -151,20 +158,26 @@ set(ax3,'FontSize',tickFontSize,'FontWeight','bold','XColor','k','YColor','k')
 
 % (d) Difference
 ax4 = nexttile;
+yyaxis left
 plot(RefDT,Trace_diff,'r-','LineWidth',2);
 hold on
 yline(0,'k-','LineWidth',1);
-xlim(sharedDateLimits)
 ylim(differenceLimits)
-xlabel('Date','FontSize',labelFontSize,'FontWeight','bold','Color','k')
 ylabel('Difference (ft)','FontSize',labelFontSize,'FontWeight','bold','Color','k')
-title('(d) WebPlotDigitizer - Water-level difference',...
-    'FontSize',titleFontSize,'FontWeight','bold','Color','k')
+yyaxis right
+percentageLimits = (differenceLimits ./ 13.5) * 100;
+ylim(percentageLimits)
+ylabel('Difference (%)','FontSize',labelFontSize,'FontWeight','bold','Color','k')
+xlim(sharedDateLimits)
+xlabel('Date', 'FontSize',labelFontSize,'FontWeight','bold','Color','k')
+title('(d) WebPlotDigitizer - Water-level difference','FontSize',titleFontSize,'FontWeight','bold','Color','k')
 grid on
 box on
-set(ax4,'FontSize',tickFontSize,'FontWeight','bold','XColor','k','YColor','k')
+ax4.YAxis(1).Color = 'k';
+ax4.YAxis(2).Color = 'k';
+set(ax4, ...
+    'FontSize',tickFontSize,'FontWeight','bold','XColor','k')
 linkaxes([ax3 ax4],'x');
-
 %% FIGURES 3 AND 4 LLMS
 
 figure

@@ -2,7 +2,7 @@ clear; clc; close all;
 
 %% LOAD TIMES
 
-filein = 'Digitisation_tools_test_data.xlsx';
+filein = '../DATA/Digitisation_tools_test_data.xlsx';
 
 TIME = readcell(filein, 'Sheet', 'TIMES');
 
