@@ -20,10 +20,8 @@ TimeMatrix = [ ...
     PlotdigitiserT
     GraphGrabberT
     GetDataT
-    GeminiT
-    ChatGPTT
-    Gemini_ProT
-    ChatGPTNEWT
+    Gemini3ProT
+    ChatGPT5T
 ];
 
 TimeTable = array2table(TimeMatrix, ...
@@ -53,8 +51,8 @@ pointClickMethods = ["GetData", "Engauge Digitizer", "DigitizeIt", ...
 pointClickLabels = ["GetData Graph Digitizer", "Engauge Digitizer", "DigitizeIt", ...
                     "GRABIT", "GraphGrabber", "Dagra", "OriginLab"];
 
-llmMethods = ["ChatGPT", "Gemini", "ChatGPT 5.5", "Gemini Pro" ];
-llmLabels  = llmMethods;
+llmMethods = ["Gemini 3.1Pro", "ChatGPT5.5"];
+llmLabels = ["Gemini 3.1 Pro", "ChatGPT 5.5"];
 
 RMSE = str2double(string(RMSETable{:,:}));
 Time = str2double(string(TimeTable{:,:}));
@@ -222,19 +220,19 @@ timeCLim = getGlobalDifferenceLimit(Time_Category_Clean, Time_Trace, Time_Point,
 
 figure
 plotPairwiseMatrixLower(categoryNames, categoryLabels, Category_Posthoc_Time, ...
-    'Pairwise Comparisons of Efficiency Among Categories')
+    'Pairwise Comparisons of Digitisation Speed Among Categories')
 
 figure
 plotPairwiseMatrixLower(traceMethods, traceLabels, traceTimeTable, ...
-    'Pairwise Comparisons of Efficiency Among Trace Tools')
+    'Pairwise Comparisons of Digitisation Speed Among Trace Tools')
 
 figure
 plotPairwiseMatrixLower(pointClickMethods, pointClickLabels, pointTimeTable, ...
-    'Pairwise Comparisons of Efficiency Among Point-and-Click Tools')
+    'Pairwise Comparisons of Digitisation Speed Among Point-and-Click Tools')
 
 figure
 plotPairwiseMatrixLower(llmMethods, llmLabels, llmTimeTable, ...
-    'Pairwise Comparisons of Efficiency Among LLMs')
+    'Pairwise Comparisons of Digitisation Speed Among LLMs')
 
 %% 10. P-VALUE MATRICES — ACCURACY
 
@@ -297,6 +295,51 @@ figure
 plotMeanDifferenceMatrixLower(llmMethods, llmLabels, Time_LLM, ...
     'Mean Time Difference Between LLMs', ...
     'Mean Time Difference (min)', timeCLim)
+    
+%% 13. MEAN RMSE AND STANDARD DEVIATION FOR EACH TOOL
+
+% Calculate statistics across attempts for each tool
+Mean_RMSE = mean(RMSE, 2, 'omitnan');
+SD_RMSE = std(RMSE, 0, 2, 'omitnan');
+
+% Count valid attempts for each tool
+N_Attempts = sum(isfinite(RMSE), 2);
+
+% Create summary table
+RMSE_Summary = table( ...
+    methodList(:), ...
+    Mean_RMSE, ...
+    SD_RMSE, ...
+    N_Attempts, ...
+    'VariableNames', ...
+    {'Tool', 'Mean_RMSE_ft', 'SD_RMSE_ft', 'N_Attempts'});
+
+% Display results
+disp('MEAN RMSE AND STANDARD DEVIATION FOR EACH TOOL')
+disp(RMSE_Summary)
+
+
+%% 14. MEAN TIME AND STANDARD DEVIATION FOR EACH TOOL
+
+% Calculate statistics across attempts for each tool
+Mean_Time = mean(Time, 2, 'omitnan');
+SD_Time = std(Time, 0, 2, 'omitnan');
+
+% Count valid attempts for each tool
+N_Time_Attempts = sum(isfinite(Time), 2);
+
+% Create summary table
+Time_Summary = table( ...
+    methodList(:), ...
+    Mean_Time, ...
+    SD_Time, ...
+    N_Time_Attempts, ...
+    'VariableNames', ...
+    {'Tool', 'Mean_Time_min', 'SD_Time_min', 'N_Attempts'});
+
+% Display results
+disp('MEAN TIME AND STANDARD DEVIATION FOR EACH TOOL')
+disp(Time_Summary)
 
 %% HELPER FUNCTIONS
 
